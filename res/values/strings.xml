@@ -7,5 +7,7 @@
     <string name="menu_friends">Vänner</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_about">Om</string>
+    <string name="about_text">Alfred is developed by E-Group</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>
