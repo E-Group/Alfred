@@ -6,7 +6,7 @@
 
     <uses-sdk 
         android:minSdkVersion="8"
-        />
+        android:targetSdkVersion="16"/>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -20,13 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FriendsActivity"
-            android:label="@string/title_activity_friends" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="se.egroup.alfred.Main" />
-        </activity>
+       
     </application>
 
 </manifest>
