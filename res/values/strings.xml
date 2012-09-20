@@ -6,5 +6,7 @@
     <string name="menu_new">Nytt spel</string>
     <string name="menu_friends">Vänner</string>
     <string name="menu_settings">Inställningar</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_friends">FriendsActivity</string>
 
 </resources>

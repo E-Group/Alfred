@@ -25,7 +25,7 @@ public class Main extends Activity {
     	super.onStart();
         // The activity is about to become visible.
     }
-    
+   
     @Override
     public void onResume(){
     	super.onResume();
