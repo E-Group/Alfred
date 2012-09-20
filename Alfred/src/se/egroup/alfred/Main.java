@@ -3,6 +3,13 @@ package se.egroup.alfred;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * 
+ * Test Test Test
+ * 
+ * @author Lalle
+ *
+ */
 public class Main extends Activity {
     /** Called when the activity is first created. */
     @Override
