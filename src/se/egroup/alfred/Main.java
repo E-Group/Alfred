@@ -5,10 +5,10 @@ import android.os.Bundle;
 
 /**
  * 
- * Test Test Test
- * TEST AV EMIL
+ * The very beginning of a cool app
  * 
  * @author Lalle
+ * @author Emil	
  * 
  */
 public class Main extends Activity {
@@ -22,32 +22,32 @@ public class Main extends Activity {
     
     @Override
     public void onStart(){
-    	super.onStart();
         // The activity is about to become visible.
+    	super.onStart();
     }
    
     @Override
     public void onResume(){
-    	super.onResume();
         // The activity has become visible (it is now "resumed").
+    	super.onResume();
     }
     
     @Override
     public void onPause(){
-    	super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
+    	super.onPause();
     }
     
     @Override
     public void onStop(){
-    	super.onStop();
         // The activity is no longer visible (it is now "stopped")
+    	super.onStop();
     }
     
     @Override
     public void onDestroy(){
-    	super.onDestroy();
         // The activity is about to be destroyed.
+    	super.onDestroy();
     }
     
 }
