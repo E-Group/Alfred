@@ -20,18 +20,28 @@ public class Main extends Activity {
     }
     
     @Override
-    public void onStart(){}
+    public void onStart(){
+    	super.onStart();
+    }
+   
+    @Override
+    public void onResume(){
+    	super.onResume();
+    }
     
     @Override
-    public void onResume(){}
+    public void onPause(){
+    	super.onPause();
+    }
     
     @Override
-    public void onPause(){}
+    public void onStop(){
+    	super.onStop();
+    }
     
     @Override
-    public void onStop(){}
-    
-    @Override
-    public void onDestroy(){}
+    public void onDestroy(){
+    	super.onDestroy();
+    }
     
 }
