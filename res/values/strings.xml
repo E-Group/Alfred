@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, Main!</string>
     <string name="app_name">Alfred</string>
+    <string name="title">ALFRED</string>
+    <string name="menu_new">Nytt spel</string>
+    <string name="menu_friends">Vänner</string>
+    <string name="menu_settings">Inställningar</string>
 
 </resources>

@@ -9,7 +9,7 @@ import android.os.Bundle;
  * TEST AV EMIL
  * 
  * @author Lalle
- *
+ * 
  */
 public class Main extends Activity {
     /** Called when the activity is first created. */
@@ -18,4 +18,20 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
+    
+    @Override
+    public void onStart(){}
+    
+    @Override
+    public void onResume(){}
+    
+    @Override
+    public void onPause(){}
+    
+    @Override
+    public void onStop(){}
+    
+    @Override
+    public void onDestroy(){}
+    
 }
