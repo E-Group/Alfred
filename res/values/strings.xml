@@ -9,5 +9,9 @@
     <string name="menu_about">Om</string>
     <string name="about_text">Alfred is developed by E-Group</string>
     <string name="title_activity_about">AboutActivity</string>
-
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+	<string name="pref_gay">Emil</string>
+    <string name="pref_gay_summ">Emil är bög</string>
+	
 </resources>

@@ -16,6 +16,16 @@ import android.view.View;
 public class Main extends Activity {
 	
 	/**
+	 * Called when the user clicks the Settings button
+	 * @param view - The view that was clicked
+	 */
+	public void button_settings(View view){
+		// TODO: change to a action bar
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+	}
+	
+	/**
 	 * Called when the user clicks the About button
 	 * @param view - The view that was clicked
 	 */
