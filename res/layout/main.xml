@@ -29,11 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/menu_settings" />
-
+
         <Button
             android:id="@+id/button_about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/menu_about" />
+            android:text="@string/menu_about"
+            android:onClick="button_about" />
 
 </LinearLayout>
