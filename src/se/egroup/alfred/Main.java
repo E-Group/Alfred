@@ -20,7 +20,7 @@ public class Main extends Activity {
 	 * @param view - The view that was clicked
 	 */
 	public void button_settings(View view){
-		// TODO: change to a action bar
+		// TODO: change to a action bar?
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 	}
