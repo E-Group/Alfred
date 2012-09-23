@@ -27,6 +27,12 @@ public class LoginActivity extends Activity {
 		finish();
 	}
 	
+	public void button_signup(View view){
+		Intent intent = new Intent(this, SignupActivity.class);
+		startActivity(intent);
+		finish();
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

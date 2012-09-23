@@ -13,8 +13,11 @@
     <string name="pref_gay_summ">Emil är bög</string>
     <string name="login_name_text">Användarnamn</string>
     <string name="login_pass_text">Lösenord</string>
-	<string name="login_loginbtn_text">Logga in</string>
-	
-	<string name="hello_world">Hello world!</string>
+    <string name="login_loginbtn_text">Logga in</string>
+    <string name="login_signup_text">Har du inget konto?</string>
+    <string name="login_signupbtn_text">Registrera</string>
+    <string name="signup_email_text">E-mail</string>
     
+    <string name="hello_world">Hello world!</string>
+
 </resources>
