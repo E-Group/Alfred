@@ -17,7 +17,7 @@
     <string name="login_signup_text">Har du inget konto?</string>
     <string name="login_signupbtn_text">Registrera</string>
     <string name="signup_email_text">E-mail</string>
-    
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>

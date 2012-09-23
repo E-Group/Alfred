@@ -16,13 +16,15 @@
             android:id="@+id/button_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/menu_new" />
+            android:text="@string/menu_new"
+            android:onClick="button_new" />
 
         <Button
             android:id="@+id/button_friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/menu_friends" />
+            android:text="@string/menu_friends"
+            android:onClick="button_friends" />
 
         <Button
             android:id="@+id/button_settings"

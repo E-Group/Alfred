@@ -1,5 +1,6 @@
 package se.egroup.alfred;
 
+import se.egroup.game.GameActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.view.View;
  * The very beginning of a cool app
  * 
  * @author Lalle
- * @author Emil	
+ * @author Emil
  * 
  */
 public class Main extends Activity {
@@ -19,6 +20,24 @@ public class Main extends Activity {
 	// kan spela spelet utan att logga in, men man måste skapa
 	// konto om man ska spela mot polare?
 	// källa: http://developer.android.com/training/id-auth/identify.html
+	
+	/**
+	 * Called when the user clicks the New Game button
+	 * @param view - The view that was clicked
+	 */
+	public void button_new(View view){
+		Intent intent = new Intent(this, GameActivity.class);
+		startActivity(intent);
+	}
+	
+	/**
+	 * Called when the user clicks the Friends button
+	 * @param view - The view that was clicked
+	 */
+	public void button_friends(View view){
+		//Intent intent = new Intent(this, GameActivity.class);
+		//startActivity(intent);
+	}
 	
 	/**
 	 * Called when the user clicks the Settings button
