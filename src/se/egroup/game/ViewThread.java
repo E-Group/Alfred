@@ -9,6 +9,8 @@ public class ViewThread extends Thread {
 	private boolean mRun = false;
 	private long mStartTime;
 	private long mElapsed;
+	private long threadElapsed;
+	private long threadStartTime;
 
 	public ViewThread(Panel panel) {
 		mPanel = panel;
@@ -22,13 +24,15 @@ public class ViewThread extends Thread {
 	@Override
 	public void run() {
 		Canvas canvas = null;
+		threadStartTime = System.currentTimeMillis();
 		mStartTime = System.currentTimeMillis();
 		while (mRun) {
 			canvas = mHolder.lockCanvas();
 			if (canvas != null) {
 				mPanel.animate(mElapsed);
-				mPanel.doDraw(mElapsed, canvas);
+				mPanel.doDraw(mElapsed, canvas, threadElapsed);
 				mElapsed = System.currentTimeMillis() - mStartTime;
+				threadElapsed = System.currentTimeMillis() - threadStartTime;
 				mHolder.unlockCanvasAndPost(canvas);
 			}
 			mStartTime = System.currentTimeMillis();

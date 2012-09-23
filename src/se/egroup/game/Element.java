@@ -17,14 +17,26 @@ public class Element {
      
     public Element(Resources res, int x, int y) {
         Random rand = new Random();
-        mBitmap = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
-        mX = x - mBitmap.getWidth() / 2;
-        mY = y - mBitmap.getHeight() / 2;
-        mSpeedX = rand.nextInt(7) - 3;
-        mSpeedY = rand.nextInt(7) - 3;
+        mBitmap = BitmapFactory.decodeResource(res, R.drawable.box_blue);
+        //mX = x - mBitmap.getWidth() / 2;
+        //mY = y - mBitmap.getHeight() / 2;
+        //mSpeedX = rand.nextInt(7) - 3;
+        //mSpeedY = rand.nextInt(7) - 3;
+        mX = x;
+        mY = y;
+        mSpeedX = 0;
+        mSpeedY = -3;
     }
  
-    public void animate(long elapsedTime) {
+    public int getX() {
+		return mX;
+	}
+
+	public int getY() {
+		return mY;
+	}
+
+	public void animate(long elapsedTime) {
         mX += mSpeedX * (elapsedTime / 20f);
         mY += mSpeedY * (elapsedTime / 20f);
         checkBorders();
@@ -40,7 +52,8 @@ public class Element {
         }
         if (mY <= 0) {
             mY = 0;
-            mSpeedY = -mSpeedY;
+           // mSpeedY = -mSpeedY;
+            mSpeedY = 0;
         }
         if (mY + mBitmap.getHeight() >= Panel.mHeight) {
             mSpeedY = -mSpeedY;
