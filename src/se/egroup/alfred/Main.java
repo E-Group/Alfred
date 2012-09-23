@@ -15,6 +15,11 @@ import android.view.View;
  */
 public class Main extends Activity {
 	
+	// TODO: Kanske strukturera om login funktionen, så att man
+	// kan spela spelet utan att logga in, men man måste skapa
+	// konto om man ska spela mot polare?
+	// källa: http://developer.android.com/training/id-auth/identify.html
+	
 	/**
 	 * Called when the user clicks the Settings button
 	 * @param view - The view that was clicked
