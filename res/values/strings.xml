@@ -6,5 +6,18 @@
     <string name="menu_new">Nytt spel</string>
     <string name="menu_friends">Vänner</string>
     <string name="menu_settings">Inställningar</string>
+    <string name="menu_about">Om</string>
+    <string name="about_text">Alfred is developed by E-Group</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="pref_gay">Emil</string>
+    <string name="pref_gay_summ">Emil är bög</string>
+    <string name="login_name_text">Användarnamn</string>
+    <string name="login_pass_text">Lösenord</string>
+    <string name="login_loginbtn_text">Logga in</string>
+    <string name="login_signup_text">Har du inget konto?</string>
+    <string name="login_signupbtn_text">Registrera</string>
+    <string name="signup_email_text">E-mail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>
