@@ -12,7 +12,7 @@ public class LoginActivity extends Activity {
 	private boolean loggedIn = false;
 	
 	private void checkLoginStatus(){
-		if(true){
+		if(loggedIn){
 			// TODO: call for button_login instead, but with which view?
 			// TODO: save the login state with onSaveInstanceState?
 			Intent intent = new Intent(this, Main.class);
