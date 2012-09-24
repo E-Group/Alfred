@@ -1,11 +1,13 @@
 package se.egroup.game;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Window;
 
 public class GameActivity extends Activity {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,6 +17,8 @@ public class GameActivity extends Activity {
         // http://www.droidnova.com/2d-tutorial-series-part-i,770.html
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Panel(this));
+        
+        
     }
 
 }

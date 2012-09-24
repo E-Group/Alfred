@@ -7,61 +7,85 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 public class Element {
-    private int mX;
-    private int mY;
+    private int xPosition;
+    private int yPosition;
     private Bitmap mBitmap;
-    private int mSpeedX;
-    private int mSpeedY;
+    private int xSpeed;
+    private int ySpeed;
      
-    public Element(Resources res, int x, int y) {
+    public Element(Resources res, int x, int y, float blockWidth) {
         Random rand = new Random();
-        mBitmap = BitmapFactory.decodeResource(res, R.drawable.box_blue);
-        //mX = x - mBitmap.getWidth() / 2;
-        //mY = y - mBitmap.getHeight() / 2;
-        //mSpeedX = rand.nextInt(7) - 3;
-        //mSpeedY = rand.nextInt(7) - 3;
-        mX = x;
-        mY = y;
-        mSpeedX = 0;
-        mSpeedY = -3;
+        mBitmap = getResizedBitmap(BitmapFactory.decodeResource(res, R.drawable.box_blue), blockWidth);
+        //xPosition = x - mBitmap.getWidth() / 2;
+        //yPosition = y - mBitmap.getHeight() / 2;
+        //xSpeed = rand.nextInt(7) - 3;
+        //ySpeed = rand.nextInt(7) - 3;
+        xPosition = x;
+        yPosition = y;
+        xSpeed = 0;
+        ySpeed = -3;
     }
  
-    public int getX() {
-		return mX;
+    public int getXPosition() {
+		return xPosition;
 	}
 
-	public int getY() {
-		return mY;
+	public int getYPosition() {
+		return yPosition;
 	}
 
-	public void animate(long elapsedTime) {
-        mX += mSpeedX * (elapsedTime / 20f);
-        mY += mSpeedY * (elapsedTime / 20f);
-        checkBorders();
+	public void animate(long elapsedTime, float mHeight) {
+        xPosition += xSpeed * (elapsedTime / 20f);
+        yPosition -= ySpeed * (elapsedTime / 20f);
+        checkBorders(mHeight);
     }
     
-    private void checkBorders() {
-        if (mX <= 0) {
-            mSpeedX = -mSpeedX;
-            mX = 0;
-        } else if (mX + mBitmap.getWidth() >= Panel.mWidth) {
-            mSpeedX = -mSpeedX;
-            mX = (int) (Panel.mWidth - mBitmap.getWidth());
+    private void checkBorders(final float mHeight) {
+        if (xPosition <= 0) {
+            xSpeed = -xSpeed;
+            xPosition = 0;
+        } else if (xPosition + mBitmap.getWidth() >= Panel.mWidth) {
+            xSpeed = -xSpeed;
+            xPosition = (int) (Panel.mWidth - mBitmap.getWidth());
         }
-        if (mY <= 0) {
-            mY = 0;
-           // mSpeedY = -mSpeedY;
-            mSpeedY = 0;
+        if (yPosition >= mHeight) {
+            yPosition = (int) mHeight;
+           // ySpeed = -ySpeed;
+            ySpeed = 0;
         }
-        if (mY + mBitmap.getHeight() >= Panel.mHeight) {
-            mSpeedY = -mSpeedY;
-            mY = (int) (Panel.mHeight - mBitmap.getHeight());
+        if (yPosition + mBitmap.getHeight() >= Panel.mHeight) {
+            ySpeed = 0;
+            yPosition = (int) (Panel.mHeight - mBitmap.getHeight());
         }
     }
     
     public void doDraw(Canvas canvas) {
-        canvas.drawBitmap(mBitmap, mX, mY, null);
+        canvas.drawBitmap(mBitmap, xPosition, yPosition, null);
     }
+    
+    public Bitmap getResizedBitmap(Bitmap bm, float newDimension) {
+
+    	int width = bm.getWidth();
+    	int height = bm.getHeight();
+
+    	float scaleWidth = newDimension;
+    	float scaleHeight = newDimension;
+
+    	// create a matrix for the manipulation
+    	Matrix matrix = new Matrix();
+
+    	// resize the bit map
+    	matrix.postScale(scaleWidth, scaleHeight);
+
+    	// recreate the new Bitmap
+
+    	Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+
+    	return resizedBitmap;
+
+    	}
+
 }
