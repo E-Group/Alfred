@@ -18,11 +18,12 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private ViewThread mThread;
 	private ArrayList<Element> mElements = new ArrayList<Element>();
 	private ArrayList<Element> closestElements = new ArrayList<Element>();
-	public static float mWidth;
-	public static float mHeight;
-	public static float blockWidth;
+	public static float screenWidth;
+	public static float screenHeight;
+	public static float blockPositions;
 	public static float pixelPadding = 10;
-	public static int slots = 5;
+	private static String[] elementCombinations = {"Square", "Horse"," Row","Finger","Zag"};
+	public static int blockSlots = 5;
 	private int mElementNumber = 0;
 	private Paint mPaint = new Paint();
 
@@ -43,7 +44,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		synchronized (mElements) {
 			// mElements.add(new Element(getResources(), (int) event.getX(),
 			// (int) event.getY()));
-			Element e = new Element(getResources(), calculateXPosition(), 0, blockWidth);
+			Element e = new Element(getResources(), calculateXPosition(), 0);
 			mElements.add(e);
 			mElementNumber = mElements.size();
 		}
@@ -65,10 +66,10 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	private int calculateXPosition() {
 		Random rand = new Random();
-		int x = rand.nextInt(slots);
+		int x = rand.nextInt(blockSlots);
 		String stringX = String.valueOf(x);
 		Log.d("RAND", stringX);
-		x *= 72; // bredden av ett block
+		x *= blockPositions; // bredden av ett block
 		return x;
 	}
 
@@ -92,11 +93,8 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	public void animate(long elapsedTime) {
 		synchronized (mElements) {
 			for (Element element : mElements) {
-				element.animate(elapsedTime, mHeight);
-				closestElements = calculateClosestElements(element);
-				if (!closestElements.isEmpty()) {
-
-				}
+				element.animate(elapsedTime, screenHeight, mElements);
+				
 			}
 		}
 	}
@@ -130,9 +128,9 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		mWidth = width; // HTC Desire = 480
-		mHeight = height; // HTC Desire = 762
-		blockWidth = (mWidth - 2*pixelPadding) / slots;
+		screenWidth = width; // HTC Desire = 480
+		screenHeight = height; // HTC Desire = 762
+		blockPositions = (screenWidth - 2*pixelPadding) / blockSlots;
 	}
 
 

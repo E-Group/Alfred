@@ -1,5 +1,6 @@
 package se.egroup.game;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import se.egroup.alfred.R;
@@ -15,21 +16,32 @@ public class Element {
     private Bitmap mBitmap;
     private int xSpeed;
     private int ySpeed;
+    private int bitmapWidth;
      
-    public Element(Resources res, int x, int y, float blockWidth) {
-        Random rand = new Random();
-        mBitmap = getResizedBitmap(BitmapFactory.decodeResource(res, R.drawable.box_blue), blockWidth);
-        //xPosition = x - mBitmap.getWidth() / 2;
-        //yPosition = y - mBitmap.getHeight() / 2;
-        //xSpeed = rand.nextInt(7) - 3;
-        //ySpeed = rand.nextInt(7) - 3;
+    public Element(Resources res, int x, int y) {
+        mBitmap = BitmapFactory.decodeResource(res, R.drawable.box_blue);
+        bitmapWidth = mBitmap.getWidth();
         xPosition = x;
         yPosition = y;
         xSpeed = 0;
         ySpeed = -3;
     }
  
-    public int getXPosition() {
+    /**
+	 * @return the bitmapWidth
+	 */
+	public int getBitmapWidth() {
+		return bitmapWidth;
+	}
+
+	/**
+	 * @param bitmapWidth the bitmapWidth to set
+	 */
+	public void setBitmapWidth(int bitmapWidth) {
+		this.bitmapWidth = bitmapWidth;
+	}
+
+	public int getXPosition() {
 		return xPosition;
 	}
 
@@ -37,35 +49,40 @@ public class Element {
 		return yPosition;
 	}
 
-	public void animate(long elapsedTime, float mHeight) {
+	public void animate(long elapsedTime, float mHeight, ArrayList<Element> elements) {
         xPosition += xSpeed * (elapsedTime / 20f);
         yPosition -= ySpeed * (elapsedTime / 20f);
-        checkBorders(mHeight);
+        checkBorders(mHeight, elements);
+        checkCollisions(this, elements);
     }
     
-    private void checkBorders(final float mHeight) {
-        if (xPosition <= 0) {
-            xSpeed = -xSpeed;
-            xPosition = 0;
-        } else if (xPosition + mBitmap.getWidth() >= Panel.mWidth) {
-            xSpeed = -xSpeed;
-            xPosition = (int) (Panel.mWidth - mBitmap.getWidth());
-        }
+	private void checkBorders(final float mHeight, ArrayList<Element> elements) {
         if (yPosition >= mHeight) {
             yPosition = (int) mHeight;
            // ySpeed = -ySpeed;
             ySpeed = 0;
         }
-        if (yPosition + mBitmap.getHeight() >= Panel.mHeight) {
+        if (yPosition + mBitmap.getHeight() >= Panel.screenHeight) {
             ySpeed = 0;
-            yPosition = (int) (Panel.mHeight - mBitmap.getHeight());
+            yPosition = (int) (Panel.screenHeight - mBitmap.getHeight());
         }
     }
+
+    private void checkCollisions(Element element, ArrayList<Element> elements) {
+        for(Element e: elements){
+        	if(element.xPosition == e.getXPosition()){
+        		if(element.yPosition + element.bitmapWidth + Panel.pixelPadding == e.yPosition){
+        			element.ySpeed = 0;
+        		}
+        	}
+        }
+	}
     
     public void doDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, xPosition, yPosition, null);
     }
     
+    @Deprecated
     public Bitmap getResizedBitmap(Bitmap bm, float newDimension) {
 
     	int width = bm.getWidth();
