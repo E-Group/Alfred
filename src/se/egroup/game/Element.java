@@ -24,7 +24,7 @@ public class Element {
         xPosition = x;
         yPosition = y;
         xSpeed = 0;
-        ySpeed = -3;
+        ySpeed = -15;
     }
  
     /**
@@ -49,6 +49,13 @@ public class Element {
 		return yPosition;
 	}
 
+	/**
+	 * @return the ySpeed
+	 */
+	public boolean isMoving() {
+		return ySpeed == 0;
+	}
+
 	public void animate(long elapsedTime, float mHeight, ArrayList<Element> elements) {
         xPosition += xSpeed * (elapsedTime / 20f);
         yPosition -= ySpeed * (elapsedTime / 20f);
@@ -69,40 +76,18 @@ public class Element {
     }
 
     private void checkCollisions(Element element, ArrayList<Element> elements) {
-        for(Element e: elements){
-        	if(element.xPosition == e.getXPosition()){
-        		if(element.yPosition + element.bitmapWidth + Panel.pixelPadding == e.yPosition){
-        			element.ySpeed = 0;
-        		}
-        	}
-        }
+        synchronized (elements) {
+        	for(Element e: elements){
+            	if(element.xPosition == e.getXPosition()){
+            		if(element.yPosition + element.bitmapWidth == e.yPosition){
+            			element.ySpeed = 0;
+            		}
+            	}
+            }
+		}
 	}
     
     public void doDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, xPosition, yPosition, null);
     }
-    
-    @Deprecated
-    public Bitmap getResizedBitmap(Bitmap bm, float newDimension) {
-
-    	int width = bm.getWidth();
-    	int height = bm.getHeight();
-
-    	float scaleWidth = newDimension;
-    	float scaleHeight = newDimension;
-
-    	// create a matrix for the manipulation
-    	Matrix matrix = new Matrix();
-
-    	// resize the bit map
-    	matrix.postScale(scaleWidth, scaleHeight);
-
-    	// recreate the new Bitmap
-
-    	Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-
-    	return resizedBitmap;
-
-    	}
-
 }

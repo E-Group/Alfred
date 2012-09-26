@@ -36,7 +36,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		deleteElement((int) event.getX(), (int) event.getY());
+		removeElement((int) event.getX(), (int) event.getY());
 		return super.onTouchEvent(event);
 	}
 
@@ -50,13 +50,14 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	private void deleteElement(int x, int y) {
+	private void removeElement(int x, int y) {
 		synchronized (mElements) {
+			int bitmapWidth = mElements.get(0).getBitmapWidth();
 			for (Element element : mElements) {
 				if (x > element.getXPosition()
-						&& x < element.getXPosition() + 72
+						&& x < element.getXPosition() + bitmapWidth
 						&& y > element.getYPosition()
-						&& y < element.getYPosition() + 72) {
+						&& y < element.getYPosition() + bitmapWidth) {
 					mElements.remove(element);
 					break;
 				}
@@ -75,16 +76,20 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void doDraw(long elapsed, Canvas canvas, long threadElapsed) {
 		canvas.drawColor(Color.BLACK);
+		boolean everyoneHasStopped = false;
 		synchronized (mElements) {
 			for (Element element : mElements) {
 				element.doDraw(canvas);
+				everyoneHasStopped = element.isMoving();
+				Log.d("stopped", ""+everyoneHasStopped);
+			}
+			if(everyoneHasStopped){
+				addElement();
 			}
 		}
-
+		
 		String time = String.valueOf(threadElapsed);
-		if (threadElapsed % 4000 <= 50) {
-			addElement();
-		}
+		
 
 		canvas.drawText("FPS: " + Math.round(1000f / elapsed) + " Elements: "
 				+ mElementNumber, 10, 10, mPaint);
@@ -99,25 +104,13 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	private ArrayList<Element> calculateClosestElements(Element element) {
-		closestElements = new ArrayList<Element>();
-		// TODO Auto-generated method stub
-		for (Element e : mElements) {
-			if (Math.abs((double) (element.getXPosition() - e.getXPosition())) < 72
-					&& Math.abs((double) (element.getYPosition() - e
-							.getYPosition())) < 72) {
-				closestElements.add(e);
-			}
-		}
-		return closestElements;
-	}
-
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		if (!mThread.isAlive()) {
 			mThread = new ViewThread(this);
 			mThread.setRunning(true);
 			mThread.start();
+			addElement();
 		}
 	}
 	
