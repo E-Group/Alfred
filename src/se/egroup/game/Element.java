@@ -78,11 +78,19 @@ public class Element {
     private void checkCollisions(Element element, ArrayList<Element> elements) {
         synchronized (elements) {
         	for(Element e: elements){
-            	if(element.xPosition == e.getXPosition()){
+            	if(	element.xPosition == e.getXPosition() && 
+            		element.yPosition + element.bitmapWidth >= e.yPosition &&
+            		element.yPosition + element.bitmapWidth <= e.yPosition + 30){
+            		element.ySpeed = 0;
+            	}
+        		
+        		// det är ju sällan den har exakta x och y positioner
+        		// med tanke på pixelhastigheten
+        		/*if(element.xPosition == e.getXPosition()){
             		if(element.yPosition + element.bitmapWidth == e.yPosition){
             			element.ySpeed = 0;
             		}
-            	}
+            	}*/
             }
 		}
 	}

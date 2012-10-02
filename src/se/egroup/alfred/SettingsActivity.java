@@ -2,8 +2,6 @@ package se.egroup.alfred;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.app.Activity;
-import android.view.Menu;
 
 public class SettingsActivity extends PreferenceActivity {
 
