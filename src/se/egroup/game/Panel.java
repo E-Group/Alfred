@@ -25,6 +25,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private static String[] elementCombinations = {"Square", "Horse"," Row","Finger","Zag"};
 	public static int blockSlots = 5;
 	private int mElementNumber = 0;
+	// TODO: nödvändig? kan man inte använda elements.length?
 	private Paint mPaint = new Paint();
 
 	public Panel(Context context) {
@@ -85,6 +86,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			if(everyoneHasStopped){
 				addElement();
+				// TODO: bug if every element on the board is gone
 			}
 		}
 		
