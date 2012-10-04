@@ -24,10 +24,25 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	public static float pixelPadding = 10;
 	private static String[] elementCombinations = {"Square", "Horse"," Row","Finger","Zag"};
 	public static int blockSlots = 5;
-	private int mElementNumber = 0;
-	// TODO: nödvändig? kan man inte använda elements.length?
 	private Paint mPaint = new Paint();
 
+	private ArrayList<Float> lineXPositions = new ArrayList<Float>();
+	private ArrayList<Float> lineYPositions = new ArrayList<Float>();
+	private ArrayList<Element> activeElements = new ArrayList<Element>();
+
+	// Variable that choose the soultion for deleting elements
+	// Solution == 1: 	Adds element to an ArrayList when they are drawn on,
+	//					deletes them from mElements when releasing the screen.
+	// Solution == 2: 	Deletes all the elements on the line when releasing
+	// 					the screen. May reduce performance due to deep loop.
+	//
+	// Den andra lösningen känns mer responsive när man spelar, för man kanske
+	// drar över ett element en millisek innan den landar, men då tas den inte
+	// bort i första lösningen. Men det känns som att spelet laggar ibland med
+	// den lösningen.. Vad tykcer du?
+	//
+	private static final int SOLUTION = 2;
+	
 	public Panel(Context context) {
 		super(context);
 		getHolder().addCallback(this);
@@ -37,35 +52,127 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		removeElement((int) event.getX(), (int) event.getY());
-		return super.onTouchEvent(event);
+		//removeElement((int) event.getX(), (int) event.getY());
+		if(event.getActionMasked() == MotionEvent.ACTION_DOWN){
+			Log.d("TOUCH", "DOWN:"+event.getX()+":"+event.getY());
+			lineXPositions.clear(); // Kan flyttas till i slutet av ACTION_UP om
+			lineYPositions.clear(); // man vill att strecket ska försvninna direkt.
+			lineXPositions.add(event.getX());
+			lineYPositions.add(event.getY());
+			if(SOLUTION == 1){
+				checkElement(event.getX(), event.getY());
+			}
+		}
+		if(event.getActionMasked() == MotionEvent.ACTION_MOVE){
+			Log.d("TOUCH", "MOVE:"+event.getX()+":"+event.getY());
+			lineXPositions.add(event.getX());
+			lineYPositions.add(event.getY());
+			if(SOLUTION == 1){
+				checkElement(event.getX(), event.getY());
+			}
+		}
+		if(event.getActionMasked() == MotionEvent.ACTION_UP){
+			Log.d("TOUCH", "UP:"+event.getX()+":"+event.getY());
+			Log.d("LINE", "linePositions:"+lineXPositions.size());
+			lineXPositions.add(event.getX());
+			lineYPositions.add(event.getY());
+			if(SOLUTION == 1){
+				removeElementsInArrayList();
+			}else if(SOLUTION == 2){
+				removeElementsOnLine();
+			}
+		}
+		//return super.onTouchEvent(event);
+		return true;
 	}
 
-	private void addElement() {
+	/**
+	 * Function that should be used together with checkElement.
+	 * Deletes all elements i activeElements.
+	 */
+	private void removeElementsInArrayList(){
 		synchronized (mElements) {
-			// mElements.add(new Element(getResources(), (int) event.getX(),
-			// (int) event.getY()));
-			Element e = new Element(getResources(), calculateXPosition(), 0);
-			mElements.add(e);
-			mElementNumber = mElements.size();
+			synchronized (activeElements) {
+				if(mElements.isEmpty()||activeElements.isEmpty())return;
+				for(Element e : activeElements){
+					mElements.remove(e);
+				}
+				activeElements.clear();
+			}
 		}
 	}
 
-	private void removeElement(int x, int y) {
+	/**
+	 * Function that adds not moving element to a arraylist as soon as
+	 * they are drawn on. Avoids high calculations at the ACTION_UP.
+	 * This could be a good solution because falling elements should not
+	 * be allowed to be drawn on.
+	 * @param x - x position
+	 * @param y - y position
+	 */
+	private void checkElement(float x, float y){
 		synchronized (mElements) {
 			int bitmapWidth = mElements.get(0).getBitmapWidth();
 			for (Element element : mElements) {
-				if (x > element.getXPosition()
-						&& x < element.getXPosition() + bitmapWidth
-						&& y > element.getYPosition()
-						&& y < element.getYPosition() + bitmapWidth) {
-					mElements.remove(element);
-					break;
+				synchronized (activeElements) {
+					if (activeElements.contains(element)||element.isMoving()) continue;
+					if (x > element.getXPosition()
+							&& x < element.getXPosition() + bitmapWidth
+							&& y > element.getYPosition()
+							&& y < element.getYPosition() + bitmapWidth) {
+						activeElements.add(element);
+						break;
+					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * Function that adds an element
+	 */
+	private void addElement() {
+		synchronized (mElements) {
+			Element e = new Element(getResources(), calculateXPosition(), 0);
+			mElements.add(e);
+		}
+	}
+
+	/**
+	 * Remove all elements that is on the line
+	 * The function may have bad performance due the deep loops
+	 * Requires testing..
+	 * @param x - x position
+	 * @param y - y position
+	 */
+	private void removeElementsOnLine() {
+		synchronized (mElements) {
+			int bitmapWidth = mElements.get(0).getBitmapWidth();
+			if(mElements.isEmpty())return;
+			synchronized (lineXPositions) {
+				synchronized (lineYPositions) {
+					for (int i = 0; i < lineXPositions.size()-1; i++) {
+						for (Element element : mElements) {
+							if (lineXPositions.get(i) > element.getXPosition()
+									&& lineXPositions.get(i) < element.getXPosition() + bitmapWidth
+									&& lineYPositions.get(i) > element.getYPosition()
+									&& lineYPositions.get(i) < element.getYPosition() + bitmapWidth) {
+								mElements.remove(element);
+								break;
+							}
+						}
+					}
+				}
+			}
+			
+		}
+	}
+
+	/**
+	 * Function that randomizes a x position to the new elements
+	 * TODO: resizing does not work?
+	 * @return
+	 */
 	private int calculateXPosition() {
 		Random rand = new Random();
 		int x = rand.nextInt(blockSlots);
@@ -77,31 +184,40 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void doDraw(long elapsed, Canvas canvas, long threadElapsed) {
 		canvas.drawColor(Color.BLACK);
-		boolean everyoneHasStopped = false;
+		boolean lastElementIsMoving = true;
 		synchronized (mElements) {
 			for (Element element : mElements) {
 				element.doDraw(canvas);
-				everyoneHasStopped = element.isMoving();
-				Log.d("stopped", ""+everyoneHasStopped);
+				lastElementIsMoving = element.isMoving();
+				Log.d("stopped", ""+lastElementIsMoving);
 			}
-			if(everyoneHasStopped){
+			if(!lastElementIsMoving||mElements.isEmpty()){
 				addElement();
-				// TODO: bug if every element on the board is gone
 			}
 		}
-		
-		String time = String.valueOf(threadElapsed);
-		
+		mPaint.setColor(Color.RED);
+		mPaint.setStrokeWidth(10);
+		synchronized (lineXPositions) {
+			synchronized (lineYPositions) {
+				for (int i = 0; i < lineXPositions.size()-1; i++) {
+					canvas.drawLine(lineXPositions.get(i), lineYPositions.get(i),
+							lineXPositions.get(i+1), lineYPositions.get(i+1), mPaint);
+				}
+			}
+		}
+
+		// TODO: Use threadElapsed to increase the difficulty of the game
+		//String time = String.valueOf(threadElapsed);
 
 		canvas.drawText("FPS: " + Math.round(1000f / elapsed) + " Elements: "
-				+ mElementNumber, 10, 10, mPaint);
+				+ mElements.size(), 10, 10, mPaint);
 	}
 
 	public void animate(long elapsedTime) {
 		synchronized (mElements) {
 			for (Element element : mElements) {
 				element.animate(elapsedTime, screenHeight, mElements);
-				
+
 			}
 		}
 	}
@@ -115,7 +231,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			addElement();
 		}
 	}
-	
+
 	/**
 	 * Called when surfaceCreated(contentHolder) is called, but never again due
 	 * to no landscape mode in application.

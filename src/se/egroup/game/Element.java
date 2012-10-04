@@ -51,7 +51,7 @@ public class Element {
 	  * @return the ySpeed
 	  */
 	 public boolean isMoving() {
-		 return ySpeed == 0;
+		 return ySpeed != 0;
 	 }
 
 	 public void animate(long elapsedTime, float mHeight, ArrayList<Element> elements) {
