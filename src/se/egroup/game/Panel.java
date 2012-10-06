@@ -43,8 +43,10 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	//
 	private static final int SOLUTION = 2;
 	
+	private Context context;
 	public Panel(Context context) {
 		super(context);
+		this.context = context;
 		getHolder().addCallback(this);
 		mThread = new ViewThread(this);
 		mPaint.setColor(Color.WHITE);
@@ -133,7 +135,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	private void addElement() {
 		synchronized (mElements) {
-			Element e = new Element(getResources(), calculateXPosition(), 0);
+			Element e = new Element(getResources(), calculateXPosition(), -72);
 			mElements.add(e);
 		}
 	}
@@ -196,7 +198,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		mPaint.setColor(Color.RED);
-		mPaint.setStrokeWidth(10);
+		mPaint.setStrokeWidth(15);
 		synchronized (lineXPositions) {
 			synchronized (lineYPositions) {
 				for (int i = 0; i < lineXPositions.size()-1; i++) {
@@ -213,11 +215,18 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 				+ mElements.size(), 10, 10, mPaint);
 	}
 
+	/**
+	 * Calls every elements .animate
+	 * @param elapsedTime
+	 */
 	public void animate(long elapsedTime) {
 		synchronized (mElements) {
 			for (Element element : mElements) {
-				element.animate(elapsedTime, screenHeight, mElements);
-
+				boolean living = element.animate(elapsedTime, screenHeight, mElements);
+				if (!living){
+					// TODO: end the game
+					// typ byta context till gameactivity eller något..
+				}
 			}
 		}
 	}

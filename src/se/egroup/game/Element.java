@@ -7,6 +7,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
+import android.widget.Toast;
 
 public class Element {
 	private int xPosition;
@@ -54,15 +56,30 @@ public class Element {
 		 return ySpeed != 0;
 	 }
 
-	 public void animate(long elapsedTime, float mHeight, ArrayList<Element> elements) {
+	 public boolean animate(long elapsedTime, float mHeight, ArrayList<Element> elements) {
 		 xPosition += xSpeed * (elapsedTime / 20f);
 		 yPosition -= ySpeed * (elapsedTime / 20f);
 		 checkBorders(mHeight, elements);
 		 checkCollisions(this, elements);
 		 checkFloor(this, elements);
+		 return checkLose();
+	 }
+	 
+	 private boolean checkLose(){
+		 if(ySpeed == 0 && yPosition <= 72){
+			 Log.d("GAME", "Torsk");
+			 return false;
+		 }
+		 return true;
 	 }
 
+	 // TODO: write javadoc
+	 /**
+	  * @param mHeight
+	  * @param elements
+	  */
 	 private void checkBorders(final float mHeight, ArrayList<Element> elements) {
+		 // TODO: Dom här sasterna gör väl samma sak?
 		 if (yPosition >= mHeight) {
 			 yPosition = (int) mHeight;
 			 // ySpeed = -ySpeed;
@@ -72,6 +89,7 @@ public class Element {
 			 ySpeed = 0;
 			 yPosition = (int) (Panel.screenHeight - mBitmap.getHeight());
 		 }
+		 
 	 }
 
 	 /**
