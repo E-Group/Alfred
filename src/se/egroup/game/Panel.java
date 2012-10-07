@@ -23,8 +23,8 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	public static float blockPositions;
 	public static float pixelPadding = 10;
 	private static String[] elementCombinations = {"Square", "Horse"," Row","Finger","Zag"};
-	public static int blockSlots = 5;
 	private Paint mPaint = new Paint();
+	private boolean successfulDraw = false;
 
 	private ArrayList<Float> lineXPositions = new ArrayList<Float>();
 	private ArrayList<Float> lineYPositions = new ArrayList<Float>();
@@ -54,6 +54,8 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		successfulDraw = false;
+		
 		//removeElement((int) event.getX(), (int) event.getY());
 		if(event.getActionMasked() == MotionEvent.ACTION_DOWN){
 			Log.d("TOUCH", "DOWN:"+event.getX()+":"+event.getY());
@@ -148,6 +150,10 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	 * @param y - y position
 	 */
 	private void removeElementsOnLine() {
+		
+		// a arraylist that contains all the elements who has been drawn on
+		ArrayList<Element> inLine = new ArrayList<Element>();
+		
 		synchronized (mElements) {
 			int bitmapWidth = mElements.get(0).getBitmapWidth();
 			if(mElements.isEmpty())return;
@@ -159,15 +165,48 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 									&& lineXPositions.get(i) < element.getXPosition() + bitmapWidth
 									&& lineYPositions.get(i) > element.getYPosition()
 									&& lineYPositions.get(i) < element.getYPosition() + bitmapWidth) {
-								mElements.remove(element);
+								//mElements.remove(element);
+								if(!inLine.contains(element)){
+									inLine.add(element);
+								}
 								break;
 							}
 						}
 					}
+					
+					approveDraw(inLine);
+					
 				}
 			}
 			
 		}
+	}
+	
+	/**
+	 * Function that decides if a draw is approved or not
+	 * @param inLine - the arraylist of elements in the draw
+	 */
+	private void approveDraw(ArrayList<Element> inLine){
+		// A successful draw should include at least two elements
+		Log.d("GAME", "size:"+inLine.size());
+		if(inLine.size() < GameSettings.MINIMUM_BLOCKS_IN_A_ROW){
+			return;
+		}
+		
+		// The algorithm checks if the letters are the same in the row
+		char lastLetter = 0;
+		for (Element element : inLine) {
+			if(element.getLetter() != lastLetter && lastLetter != 0){
+				return;
+			}
+			lastLetter = element.getLetter();
+		}
+		
+		for (Element element : inLine) {
+			mElements.remove(element);
+		}
+		
+		successfulDraw = true;
 	}
 
 	/**
@@ -177,7 +216,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	private int calculateXPosition() {
 		Random rand = new Random();
-		int x = rand.nextInt(blockSlots);
+		int x = rand.nextInt(GameSettings.BLOCK_SLOTS);
 		String stringX = String.valueOf(x);
 		Log.d("RAND", stringX);
 		x *= blockPositions; // bredden av ett block
@@ -197,7 +236,12 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 				addElement();
 			}
 		}
+		
+		// Draw
 		mPaint.setColor(Color.RED);
+		if(successfulDraw){
+			mPaint.setColor(Color.GREEN);
+		}
 		mPaint.setStrokeWidth(15);
 		synchronized (lineXPositions) {
 			synchronized (lineYPositions) {
@@ -250,7 +294,7 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			int height) {
 		screenWidth = width; // HTC Desire = 480
 		screenHeight = height; // HTC Desire = 762
-		blockPositions = (screenWidth - 2*pixelPadding) / blockSlots;
+		blockPositions = (screenWidth - 2*pixelPadding) / GameSettings.BLOCK_SLOTS;
 	}
 
 

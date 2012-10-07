@@ -7,8 +7,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Element {
 	private int xPosition;
@@ -17,6 +18,9 @@ public class Element {
 	private int xSpeed;
 	private int ySpeed;
 	private int bitmapWidth;
+	
+	private char letter;
+	private Paint paint = new Paint();
 
 	public Element(Resources res, int x, int y) {
 		mBitmap = BitmapFactory.decodeResource(res, R.drawable.box_blue);
@@ -25,8 +29,25 @@ public class Element {
 		yPosition = y;
 		xSpeed = 0;
 		ySpeed = -15;
+		
+		paint.setColor(Color.WHITE);
+		paint.setTextSize(50);
+		initiateLetter();
+	}
+	
+	private void initiateLetter(){
+		Alphabet alphabet = new Alphabet();
+		letter = alphabet.getNewLetter();
 	}
 
+	/**
+	 * Returns the elements letter
+	 * @return - the letter
+	 */
+	public char getLetter(){
+		return letter;
+	}
+	
 	/**
 	 * @return the bitmapWidth
 	 */
@@ -66,8 +87,9 @@ public class Element {
 	 }
 	 
 	 private boolean checkLose(){
-		 if(ySpeed == 0 && yPosition <= 72){
+		 if(ySpeed == 0 && yPosition <= 10){
 			 Log.d("GAME", "Torsk");
+			 Log.d("GAME", "yPos: "+yPosition);
 			 return false;
 		 }
 		 return true;
@@ -140,5 +162,7 @@ public class Element {
 
 	 public void doDraw(Canvas canvas) {
 		 canvas.drawBitmap(mBitmap, xPosition, yPosition, null);
+		 // TODO: make the positioning dynamic
+		 canvas.drawText(Character.toString(letter), xPosition + 35, yPosition + 70, paint);
 	 }
 }
