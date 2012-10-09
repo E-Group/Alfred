@@ -49,30 +49,30 @@ public class Main extends Activity {
 	 * @param view - The view that was clicked
 	 */
 	public void button_friends(View view){
-		//Intent intent = new Intent(this, GameActivity.class);
-		//startActivity(intent);
+		Intent intent = new Intent(this, FriendsActivity.class);
+		startActivity(intent);
 		
-		DefaultHttpClient hc=new DefaultHttpClient();
-		ResponseHandler <String> res=new BasicResponseHandler();
-		HttpPost postMethod=new HttpPost("http://localhost:8888/alfredserver");
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();  
-		nameValuePairs.add(new BasicNameValuePair("value1", "hejhej"));  
-		try {
-			postMethod.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-		try {
-			String response=hc.execute(postMethod,res);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		DefaultHttpClient hc=new DefaultHttpClient();
+//		ResponseHandler <String> res=new BasicResponseHandler();
+//		HttpPost postMethod=new HttpPost("http://localhost:8888/alfredserver");
+//		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();  
+//		nameValuePairs.add(new BasicNameValuePair("value1", "hejhej"));  
+//		try {
+//			postMethod.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}  
+//		try {
+//			String response=hc.execute(postMethod,res);
+//		} catch (ClientProtocolException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
 	}
 	
 	/**
