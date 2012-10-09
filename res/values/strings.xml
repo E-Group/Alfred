@@ -20,5 +20,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="expandable_list_sample_action">Sample action</string>
+    <string name="friends_head">Vänner</string>
 
 </resources>

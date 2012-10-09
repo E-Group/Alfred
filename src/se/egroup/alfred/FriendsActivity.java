@@ -2,19 +2,25 @@ package se.egroup.alfred;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class FriendsActivity extends ListActivity{
+public class FriendsActivity extends ListActivity {
 
 	private FriendsListAdapter friendsAdapter;
 	ArrayList<String> friends = new ArrayList<String>();
@@ -27,10 +33,36 @@ public class FriendsActivity extends ListActivity{
 		
 		friendsAdapter = new FriendsListAdapter(this.getBaseContext(), R.layout.friend_row, friends);
 		setListAdapter(friendsAdapter);
+		registerForContextMenu(getListView());
 	}
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		menu.setHeaderTitle("Meny");
+		menu.add("Utmana");
+		menu.add("Chatta");
+		menu.add("Ta bort");
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    String choice = info.toString();
+	    Toast.makeText(this, choice, Toast.LENGTH_SHORT).show();
+	    int index = info.position;
+	    if(choice.equals("Utmana") || choice.equals("Chatta")){
+		    Toast.makeText(this, choice, Toast.LENGTH_SHORT).show();
+	    }
+	    else if(choice.equals("Ta bort")){
+		    Toast.makeText(this, choice, Toast.LENGTH_SHORT).show();
+			friendsAdapter.removeItem(index);
+			friendsAdapter.notifyDataSetChanged();
+	    }
+	    return false;
+	}
 	public void addFriends()
 	{
+		friends.add("Caroline Bergstedt");
 		friends.add("David Buö");
 		friends.add("Emil Bergwik");
 		friends.add("Niklas Lavrell");
@@ -52,11 +84,14 @@ public class FriendsActivity extends ListActivity{
 		}
 
 		public int getCount() {
-			return this.friends.size();
+			return friends.size();
 		}
 
 		public String getItem(int index) {
-			return this.friends.get(index);
+			return friends.get(index);
+		}
+		public void removeItem(int index) {
+			friends.remove(index);
 		}
 
 		/**
@@ -78,7 +113,7 @@ public class FriendsActivity extends ListActivity{
 					fn.setText(friend);
 				}
 				if(fs != null){
-					fs.setText("Status: Offline");
+					fs.setText("Offline");
 				}
 			}
 			return row;
